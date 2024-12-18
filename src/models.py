@@ -58,16 +58,16 @@ class Planet(db.Model):
     __tablename__ = 'planet'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
-    rotation_period = db.Column(db.String(20))
-    orbital_period = db.Column(db.String(20))
-    diameter = db.Column(db.String(20))
-    climate = db.Column(db.String(20))
-    gravity = db.Column(db.String(20))
-    terrain = db.Column(db.String(20))
-    surface_water = db.Column(db.String(20))
-    population = db.Column(db.String(20))
+    rotation_period = db.Column(db.String(50))
+    orbital_period = db.Column(db.String(50))
+    diameter = db.Column(db.String(50))
+    climate = db.Column(db.String(50))
+    gravity = db.Column(db.String(50))
+    terrain = db.Column(db.String(250))
+    surface_water = db.Column(db.String(50))
+    population = db.Column(db.String(50))
     
-    # Relationship with people
+
     residents = db.relationship('People', backref='planet')
 
     def __repr__(self):
@@ -88,7 +88,7 @@ class Planet(db.Model):
             "residents": [resident.serialize() for resident in self.residents]
         }
 
-# Association tables for favorites
+
 class FavoritePeople(db.Model):
     __tablename__ = 'favorite_people'
     id = db.Column(db.Integer, primary_key=True)
