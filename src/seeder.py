@@ -1,12 +1,12 @@
 from app import app, db
-from models import Users, People, Planet, FavoritePeople, FavoritePlanets
+from models import User, Person, Planet, FavoritePerson, FavoritePlanet
 
 def seed_users():
-    if Users.query.count() == 0:
+    if User.query.count() == 0:
         users = [
-            Users(email='luke@rebellion.org', password='force123', is_active=True),
-            Users(email='leia@rebellion.org', password='alderaan123', is_active=True),
-            Users(email='han@falcon.com', password='chewie123', is_active=True)
+            User(email='luke@rebellion.org', password='force123', is_active=True),
+            User(email='leia@rebellion.org', password='alderaan123', is_active=True),
+            User(email='han@falcon.com', password='chewie123', is_active=True)
         ]
         db.session.bulk_save_objects(users)
         db.session.commit()
@@ -58,9 +58,9 @@ def seed_planets():
         print("Planets already exist, skipping...")
 
 def seed_people():
-    if People.query.count() == 0:
+    if Person.query.count() == 0:
         people = [
-            People(
+            Person(
                 name='Luke Skywalker',
                 height='172',
                 mass='77',
@@ -71,7 +71,7 @@ def seed_people():
                 gender='male',
                 home_world=1  
             ),
-            People(
+            Person(
                 name='Leia Organa',
                 height='150',
                 mass='49',
@@ -82,7 +82,7 @@ def seed_people():
                 gender='female',
                 home_world=2  
             ),
-            People(
+            Person(
                 name='Han Solo',
                 height='180',
                 mass='80',
@@ -101,14 +101,14 @@ def seed_people():
         print("People already exist, skipping...")
 
 def seed_favorites():
-    if FavoritePeople.query.count() == 0 and FavoritePlanets.query.count() == 0:
+    if FavoritePerson.query.count() == 0 and FavoritePlanet.query.count() == 0:
         favorites_people = [
-            FavoritePeople(user_id=1, people_id=2),  
-            FavoritePeople(user_id=1, people_id=3)   
+            FavoritePerson(user_id=1, people_id=2),  
+            FavoritePerson(user_id=1, people_id=3)   
         ]
         favorites_planets = [
-            FavoritePlanets(user_id=1, planet_id=1), 
-            FavoritePlanets(user_id=1, planet_id=2)  
+            FavoritePlanet(user_id=1, planet_id=1), 
+            FavoritePlanet(user_id=1, planet_id=2)  
         ]
         
         db.session.bulk_save_objects(favorites_people)

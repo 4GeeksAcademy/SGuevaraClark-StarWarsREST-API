@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class Users(db.Model):
+class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -10,11 +10,11 @@ class Users(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     
     # Relationships for favorites
-    favorite_people = db.relationship('People', secondary='favorite_people', backref='favorited_by')
+    favorite_people = db.relationship('Person', secondary='favorite_people', backref='favorited_by')
     favorite_planets = db.relationship('Planet', secondary='favorite_planets', backref='favorited_by')
 
     def __repr__(self):
-        return '<Users %r>' % self.email
+        return '<User %r>' % self.email
 
     def serialize(self):
         return {
@@ -24,7 +24,7 @@ class Users(db.Model):
             "favorite_planets": [planet.serialize() for planet in self.favorite_planets]
         }
 
-class People(db.Model):
+class Person(db.Model):
     __tablename__ = 'people'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
@@ -35,10 +35,10 @@ class People(db.Model):
     eye_color = db.Column(db.String(20))
     birth_year = db.Column(db.String(10))
     gender = db.Column(db.String(20))
-    home_world = db.Column(db.Integer, db.ForeignKey('planet.id'))
+    home_world = db.Column(db.Integer, db.ForeignKey('planets.id'))
 
     def __repr__(self):
-        return '<People %r>' % self.name
+        return '<Person %r>' % self.name
 
     def serialize(self):
         return {
@@ -55,7 +55,7 @@ class People(db.Model):
         }
 
 class Planet(db.Model):
-    __tablename__ = 'planet'
+    __tablename__ = 'planets'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     rotation_period = db.Column(db.String(50))
@@ -67,8 +67,7 @@ class Planet(db.Model):
     surface_water = db.Column(db.String(50))
     population = db.Column(db.String(50))
     
-
-    residents = db.relationship('People', backref='planet')
+    residents = db.relationship('Person', backref='planet')
 
     def __repr__(self):
         return '<Planet %r>' % self.name
@@ -88,15 +87,14 @@ class Planet(db.Model):
             "residents": [resident.serialize() for resident in self.residents]
         }
 
-
-class FavoritePeople(db.Model):
+class FavoritePerson(db.Model):
     __tablename__ = 'favorite_people'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     people_id = db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
 
-class FavoritePlanets(db.Model):
+class FavoritePlanet(db.Model):
     __tablename__ = 'favorite_planets'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'), nullable=False)
+    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'), nullable=False)
